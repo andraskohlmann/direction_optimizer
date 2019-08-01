@@ -52,7 +52,7 @@ val_dataset = val_dataset.batch(64)
 summary_writer = tf.summary.create_file_writer('out/sgd')
 with summary_writer.as_default():
     # Iterate over epochs.
-    for epoch in range(3):
+    for epoch in range(10):
         print('Start of epoch %d' % (epoch,))
 
         # Iterate over the batches of the dataset.

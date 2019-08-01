@@ -57,15 +57,15 @@ val_dataset = val_dataset.batch(64)
 opt_dataset = tf.data.Dataset.from_tensor_slices((x_opt, y_opt))
 opt_dataset = opt_dataset.batch(64)
 
-opt_steps = [1, 2]
+# opt_steps = [1, 2]
 # opt_steps = [1, 2, 4, 8, 18, 32]
-# opt_steps = [1, 2, 4, 8, 18, 32, 64, 128]
+opt_steps = [1, 2, 4, 8, 18, 32, 64, 128]
 # opt_steps = [1, 1e2, 1e3, 1e4, 1e5, 1e6]
 
-summary_writer = tf.summary.create_file_writer('out/optimizer')
+summary_writer = tf.summary.create_file_writer('out/optimizer_decay')
 with summary_writer.as_default():
     # Iterate over epochs.
-    for epoch in range(3):
+    for epoch in range(10):
         print('Start of epoch %d' % (epoch,))
 
         # Iterate over the batches of the dataset.
@@ -87,6 +87,7 @@ with summary_writer.as_default():
                 if opt_loss_value < min_loss:
                     best_step_weights = model.get_weights()
                     min_loss = opt_loss_value
+            opt_steps = [pow(_, 0.8) for _ in opt_steps]
 
             model.set_weights(best_step_weights)
             # Update training metric.
